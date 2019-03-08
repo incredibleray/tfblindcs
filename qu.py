@@ -2,15 +2,19 @@ from __future__ import absolute_import, division, print_function
 import tensorflow as tf
 import numpy as np
 
-m=np.loadtxt('A_init.csv', delimiter=',')
-# A_init=tf.Variable(m, name='A')
+y=tf.constant(np.random.rand(3, 1))
+X=tf.constant(np.random.rand(3, 2))
 
-A=tf.get_variable('A', initializer=m)
-q, r = tf.qr(A)
-d, u, v = tf.svd(A)
+D=tf.get_variable('D',[2, 2])
+z=tf.get_variable('z',[2, 1])
 
-diff=tf.abs(q)-tf.abs(u)
-loss =tf.norm(diff)
+XD=tf.matmul(X,D)
+
+residual=y-tf.matmul(XD, z)
+
+lambda_l1=0.2
+linreg_loss=tf.norm(residual)
+loss =linreg_loss+lambda_l1*tf.norm(z, ord=1)
 
 global_step = tf.Variable(0, trainable=False)
 starter_learning_rate = 0.01
@@ -19,8 +23,11 @@ learning_rate = tf.train.exponential_decay(starter_learning_rate, global_step,
 # Passing global_step to minimize() will increment it at each step.
 
 # The Gradient Descent Optimizer does the heavy lifting
-train_op = tf.train.GradientDescentOptimizer(learning_rate).minimize(loss, global_step=global_step)
+D_train_op = tf.train.GradientDescentOptimizer(learning_rate).minimize(loss, global_step=global_step, var_list=[D,])
 # train_op = tf.train.AdamOptimizer(0.001).minimize(loss)
+
+linreg_learning_rate=0.02
+z_train_op = tf.train.FtrlOptimizer(linreg_learning_rate, l1_regularization_strength=0.2).minimize(linreg_loss, var_list=[z,])
 
 # Normal TensorFlow - initialize values, create a session and run the model
 model = tf.global_variables_initializer()
