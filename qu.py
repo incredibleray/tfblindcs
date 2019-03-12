@@ -2,8 +2,8 @@ from __future__ import absolute_import, division, print_function
 import tensorflow as tf
 import numpy as np
 
-y=tf.constant(np.random.rand(3, 1))
-X=tf.constant(np.random.rand(3, 2))
+y=tf.constant(np.random.rand(3, 1), dtype=tf.float32)
+X=tf.constant(np.random.rand(3, 2), dtype=tf.float32)
 
 D=tf.get_variable('D',[2, 2])
 z=tf.get_variable('z',[2, 1])
@@ -44,7 +44,7 @@ with tf.Session() as sess:
     sess.run(D_train_op)
     this_loss = sess.run(loss)
 
-    if (i+1)%1000==0:
+    if (i+1)%10==0:
       print('Step #' + str(i+1) + ' Loss = ' + str(this_loss))
 
     if this_loss < 1e-9:
