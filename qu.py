@@ -38,7 +38,10 @@ with tf.Session() as sess:
   # np.savetxt('A_init.csv', A, delimiter=',')
 
   for i in range(50000):
-    sess.run(train_op)
+    for j in range(1000):
+      sess.run(z_train_op)
+
+    sess.run(D_train_op)
     this_loss = sess.run(loss)
 
     if (i+1)%1000==0:
@@ -47,7 +50,8 @@ with tf.Session() as sess:
     if this_loss < 1e-9:
       break
 
-  A, q, u=sess.run([A, q, u])
-  np.savetxt('A.csv', A, delimiter=',')
-  np.savetxt('q.csv', q, delimiter=',')
-  np.savetxt('u.csv', u, delimiter=',')
+  X, y, D, z=sess.run([X, y, D, z])
+  np.savetxt('X.csv', X, delimiter=',')
+  np.savetxt('y.csv', y, delimiter=',')
+  np.savetxt('D.csv', D, delimiter=',')
+  np.savetxt('z.csv', z, delimiter=',')
