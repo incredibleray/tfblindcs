@@ -3,10 +3,10 @@ import tensorflow as tf
 import numpy as np
 
 y=tf.constant(np.random.rand(3, 1), dtype=tf.float32)
-X=tf.constant(np.random.rand(3, 2), dtype=tf.float32)
+X=tf.constant(np.random.rand(3, 6), dtype=tf.float32)
 
-D=tf.get_variable('D',[2, 2])
-z=tf.get_variable('z',[2, 1])
+D=tf.get_variable('D',[6, 6])
+z=tf.get_variable('z',[6, 1])
 
 XD=tf.matmul(X,D)
 
