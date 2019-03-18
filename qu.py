@@ -8,6 +8,8 @@ X=tf.constant(np.random.rand(3, 6), dtype=tf.float32)
 D=tf.get_variable('D',[6, 6])
 z=tf.get_variable('z',[6, 1])
 
+# TODO transform D so the norm of teach col is 1
+# TODO make sure cols do not need to be orthagonal (optmiization will take car of it)
 XD=tf.matmul(X,D)
 
 residual=y-tf.matmul(XD, z)
