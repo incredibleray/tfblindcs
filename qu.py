@@ -12,7 +12,7 @@ XD=tf.matmul(X,D)
 
 residual=y-tf.matmul(XD, z)
 
-lambda_l1=0.2
+lambda_l1=0.0000001
 # linreg_loss=tf.norm(residual)
 # loss =linreg_loss+lambda_l1*tf.norm(z, ord=1)
 loss=tf.norm(residual)
