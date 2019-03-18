@@ -40,7 +40,7 @@ auto linregLoss=linreg(A, y);
 
 auto lassoLoss =lasso(A, y, 0.0001);
 
-std::cout <<"linregLoss: " << linregLoss <<"lassoLoss: " << lassoLoss <<std::endl;
+std::cout <<"linregLoss: " << linregLoss<<std::endl <<"lassoLoss: " << lassoLoss <<std::endl;
 
 
 }

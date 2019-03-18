@@ -38,7 +38,7 @@ with tf.Session() as sess:
   # A=sess.run(A)
   # np.savetxt('A_init.csv', A, delimiter=',')
 
-  for i in range(50000):
+  for i in range(5000):
     sess.run(z_train_op)
 
     if i%1000==0:
