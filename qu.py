@@ -13,21 +13,22 @@ XD=tf.matmul(X,D)
 residual=y-tf.matmul(XD, z)
 
 lambda_l1=0.2
-linreg_loss=tf.norm(residual)
-loss =linreg_loss+lambda_l1*tf.norm(z, ord=1)
+# linreg_loss=tf.norm(residual)
+# loss =linreg_loss+lambda_l1*tf.norm(z, ord=1)
+loss=tf.norm(residual)
 
 global_step = tf.Variable(0, trainable=False)
-starter_learning_rate = 0.01
+starter_learning_rate = 0.1
 learning_rate = tf.train.exponential_decay(starter_learning_rate, global_step,
                                            100, 0.96, staircase=True)
 # Passing global_step to minimize() will increment it at each step.
 
+opt=tf.train.ProximalGradientDescentOptimizer(learning_rate, l1_regularization_strength=lambda_l1)
 # The Gradient Descent Optimizer does the heavy lifting
-D_train_op = tf.train.GradientDescentOptimizer(learning_rate).minimize(loss, global_step=global_step, var_list=[D,])
-# train_op = tf.train.AdamOptimizer(0.001).minimize(loss)
-
-linreg_learning_rate=0.02
-z_train_op = tf.train.FtrlOptimizer(linreg_learning_rate, l1_regularization_strength=0.2).minimize(linreg_loss, var_list=[z,])
+D_train_op = opt.minimize(loss, global_step=global_step, var_list=[D,])
+z_train_op = opt.minimize(loss, global_step=global_step, var_list=[z,])
+# linreg_learning_rate=0.1
+# z_train_op = tf.train.FtrlOptimizer(linreg_learning_rate, l1_regularization_strength=lambda_l1).minimize(loss, var_list=[z,])
 
 # Normal TensorFlow - initialize values, create a session and run the model
 model = tf.global_variables_initializer()
@@ -38,8 +39,14 @@ with tf.Session() as sess:
   # np.savetxt('A_init.csv', A, delimiter=',')
 
   for i in range(50000):
+    if (i+1)%10==0:
+      print(sess.run(loss))
+
     for j in range(1000):
       sess.run(z_train_op)
+
+    if (i+1)%10==0:
+      print(sess.run(loss))
 
     sess.run(D_train_op)
     this_loss = sess.run(loss)
