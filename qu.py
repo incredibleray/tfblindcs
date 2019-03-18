@@ -39,20 +39,14 @@ with tf.Session() as sess:
   # np.savetxt('A_init.csv', A, delimiter=',')
 
   for i in range(50000):
-    if (i+1)%10==0:
-      print(sess.run(loss))
+    sess.run(z_train_op)
 
-    for j in range(1000):
-      sess.run(z_train_op)
-
-    if (i+1)%10==0:
-      print(sess.run(loss))
-
-    sess.run(D_train_op)
+    if i%1000==0:
+      print('Step #' + str(i) + ' Loss = ' + str(sess.run(loss)))
+      sess.run(D_train_op)
+      print('Step #' + str(i+1) + ' Loss = ' + str(sess.run(loss)))
+    
     this_loss = sess.run(loss)
-
-    if (i+1)%10==0:
-      print('Step #' + str(i+1) + ' Loss = ' + str(this_loss))
 
     if this_loss < 1e-9:
       break
