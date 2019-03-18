@@ -3,7 +3,7 @@
 #include <assert.h>
 
 bool load(arma::mat& A, arma::rowvec& y) {
-    arma::mat A;
+
   // Use data::Load() which transposes the matrix.
   // mlpack::data::Load("data.csv", data, true);
   mlpack::data::Load("X.csv", A, true);
