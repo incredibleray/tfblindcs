@@ -12,7 +12,7 @@ XD=tf.matmul(X,D)
 
 residual=y-tf.matmul(XD, z)
 
-lambda_l1=0.0000001
+lambda_l1=00.0001
 # linreg_loss=tf.norm(residual)
 # loss =linreg_loss+lambda_l1*tf.norm(z, ord=1)
 loss=tf.norm(residual)
@@ -38,7 +38,7 @@ with tf.Session() as sess:
   # A=sess.run(A)
   # np.savetxt('A_init.csv', A, delimiter=',')
 
-  for i in range(5000):
+  for i in range(50000):
     sess.run(z_train_op)
 
     if i%1000==0:
@@ -49,6 +49,7 @@ with tf.Session() as sess:
     this_loss = sess.run(loss)
 
     if this_loss < 1e-9:
+      print('Exit Loss = ' + str(this_loss))
       break
 
   X, y, D, z=sess.run([X, y, D, z])
